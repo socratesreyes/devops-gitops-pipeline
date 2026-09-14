@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  node-stress-service:
+    build: .
+    image: node-stress
+    ports:
+      - "3000:3000"
+    container_name: node-stress-container
+    restart: unless-stopped
+    command: node stress.js
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M

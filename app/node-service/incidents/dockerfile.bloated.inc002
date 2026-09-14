@@ -1,0 +1,16 @@
+# THE BLOATWARE
+FROM node:20
+WORKDIR /app
+
+# TERRIBLE PRACTICE 1: Copying everything before installing dependencies.
+# This ruins Docker layer caching. Every time you change index.js, it re-installs everything.
+COPY . .
+
+# TERRIBLE PRACTICE 2: Installing unnecessary build tools
+RUN apt-get update && apt-get install -y build-essential python3
+
+
+RUN npm install
+
+EXPOSE 3000
+CMD ["node", "index.js"]

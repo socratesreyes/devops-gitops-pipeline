@@ -1,0 +1,60 @@
+name: Polyglot CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # Job 1: Node.js Service
+  node-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: cd app/node-service && npm install
+      
+      - name: Run Node Tests
+        run: cd app/node-service && npm test --if-present
+
+  # Job 2: Python Service
+  python-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install Dependencies
+        run: cd app/python-service && pip install -r requirements.txt
+      
+      - name: Run Python Lint
+        run: cd app/python-service && python -m py_compile app.py
+
+  # Job 3: Go Service
+  go-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      
+      - name: Run Go Build
+        run: cd app/go-service && go build -v ./...
+

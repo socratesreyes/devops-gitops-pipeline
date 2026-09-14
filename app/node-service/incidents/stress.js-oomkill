@@ -1,0 +1,8 @@
+// stress.js
+const array = [];
+console.log("Starting memory stress test...");
+setInterval(() => {
+    // Fill an array with 1MB chunks
+    array.push(Buffer.alloc(1024 * 1024, 'x'));
+    console.log(`Memory used: ${array.length} MB`);
+}, 100);
